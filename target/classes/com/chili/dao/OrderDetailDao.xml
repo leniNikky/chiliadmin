@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chili.dao.OrderDetailDao">
+	<resultMap id="c" type="com.chili.pojo.OrderDetail">
+		<id column="orderdetailID" property="orderdetailID" jdbcType="INTEGER" />
+		<result column="gtotalPrice" property="gtotalPrice" jdbcType="FLOAT" />
+		<result column="userID" property="userID" jdbcType="INTEGER" />
+		<result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+		<result column="goodsID" property="goodsID" jdbcType="INTEGER" />
+		<result column="goodsName" property="goodsName" jdbcType="VARCHAR" />
+		<result column="goodsPrice" property="goodsPrice" jdbcType="FLOAT" />
+		<result column="goodsCount" property="goodsCount" jdbcType="INTEGER" />
+		<result column="gclass" property="gclass" jdbcType="VARCHAR" />
+		<result column="goodsImg" property="goodsImg" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="findODByOrderId"  resultMap="c">
+		select * from orderdetail where orderNo = #{orderNo}
+	</select>
+</mapper>

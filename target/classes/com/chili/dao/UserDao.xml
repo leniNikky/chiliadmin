@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chili.dao.UserDao">
+	<resultMap id="c" type="com.chili.pojo.User">
+		<id column="user_id" property="userID" jdbcType="INTEGER" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_password" property="userPassword"
+			jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="user_root" property="userRoot" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="checkUserName" parameterType="String" resultType="com.chili.pojo.User">
+		select * from user where user_name = #{userName}
+	</select>
+	
+	<insert id="insert" parameterType="com.chili.pojo.User">
+		insert into user
+		(user_name,
+		user_password, phone,
+		email)
+		values (#{userName},
+		#{userPassword},#{phone},#{email})
+	</insert>
+	<select id="userLogin" resultMap="c">
+		select * from user where user_name = #{0} and user_password = #{1}
+	</select>
+	<!-- 查找所有用户 -->
+	<select id="userList" resultMap="c">
+		select * from user where user_root = 0
+	</select>
+	<!-- 查找所有管理员-->
+	<select id="adminList" resultMap="c">
+		select * from user where user_root = 1
+	</select>
+	<!-- 查看用户个人信息-->
+	<select id="userInfo" resultMap="c">
+		select * from user where user_id = #{userID}
+	</select>
+	<!-- 修改用户权限 -->
+	<update id="Editroot">
+		update user set user_root= "1" where user_id = #{userID}
+	</update>
+	<!-- 根据用户名模糊查找用户-->
+	<select id="FindUserByName" parameterType="java.lang.String"  resultMap="c">
+		select * from user where user_name like '%${value}%' and user_root= "0"
+	</select>
+	<!-- 根据用户名模糊查找管理员-->
+	<select id="FindAdminByName" parameterType="java.lang.String"  resultMap="c">
+		select * from user where user_root= "1" and user_name like '%${value}%'
+	</select>
+	<!-- 添加管理员 -->
+	<insert id="insertAdmin" parameterType="com.chili.pojo.User">
+		insert into user
+		(user_name,
+		user_password, phone,
+		email,user_root)
+		values (#{userName},
+		#{userPassword},#{phone},#{email},#{userRoot})
+	</insert>
+	<!-- 修改个人信息 -->
+	<update id="EditMsg">
+		update user set email=#{2},phone=#{1} where user_id = #{0}
+	</update>
+	<!-- 修改密码 -->
+	<select id="findPs" resultType ="java.lang.String">
+		select user_password from user where user_id = #{userID}
+	</select>
+	<update id="EditPs">
+		update user set user_password=#{0} where user_id = #{1}
+	</update>
+	<!-- 统计用户数 -->
+	<select id="countUsers" resultType="INTEGER">
+		select count(user_id) as usertotal from user
+	</select>
+</mapper>

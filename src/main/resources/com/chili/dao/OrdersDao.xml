@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chili.dao.OrdersDao">
+	<resultMap id="c" type="com.chili.pojo.Orders">
+		<id column="orderID" property="orderID" jdbcType="INTEGER" />
+		<result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+		<result column="userID" property="userID" jdbcType="INTEGER" />
+		<result column="consignName" property="consignName" jdbcType="VARCHAR" />
+		<result column="consigneeAddress" property="consigneeAddress" jdbcType="VARCHAR" />
+		<result column="payway" property="payway" jdbcType="VARCHAR" />
+		<result column="orderDate" property="orderDate" jdbcType="VARCHAR" />
+		<result column="orderstatus" property="orderstatus" jdbcType="VARCHAR" />
+		<result column="totalPrice" property="totalPrice" jdbcType="FLOAT" />
+		<!-- <association property="user" javaType="com.neusoft.po.User">  
+        <result column="user_name" property="userName"/>  
+       </association> -->
+	</resultMap>
+	<!-- 查看订单详情 -->
+	<select id="findOrderByOrderId" resultMap="c">
+		select * from orders where orderID = #{orderID} 
+		<!-- select orders.*,user.user_name from orders,user where order.userID = user.user_id and order.userID = #{userID} -->
+	</select>
+	<!-- 查找订单 -->
+	<select id="findOrderByOrderID" resultMap="c">
+		select * from orders where orderID like '%${value}%'
+	</select>
+	<select id="findOrderByConsignName" resultMap="c">
+		select * from orders where consignName like '%${value}%'
+	</select>
+	<select id="findOrderByOrderstatus" resultMap="c">
+		select * from orders where orderstatus like '%${value}%'
+	</select>
+	<!-- 查看所有订单 -->
+	<select id="allOrder" resultMap="c">
+		select * from orders
+		<!-- select orders.*,user.user_name from orders,user where order.userID = user.user_id and order.userID = #{userID} -->
+	</select>
+	<!-- 查看订单的orderNo -->
+	<select id="findOrderNo" resultType="java.lang.String">
+		select orderNo from orders where orderID = #{orderID}
+	</select>
+	<!-- 统计订单数 -->
+	<select id="countOrders" resultType="INTEGER">
+		select count(orderID) as ordertotal from orders
+	</select>
+	<!-- 统计待处理订单 -->
+	<select id="countUnOrders" resultType="INTEGER">
+		select count(orderID) as unordertotal from orders where orderstatus ="待处理"
+	</select>
+	<!-- 统计已处理订单 -->
+	<select id="countOrdersEd" resultType="INTEGER">
+		select count(orderID) as orderedtotal from orders where orderstatus ="已处理"
+	</select>
+	<!-- 统计已发货订单 -->
+	<select id="countOrdersSend" resultType="INTEGER">
+		select count(orderID) as ordersendtotal from orders where orderstatus ="已发货"
+	</select>
+	<!-- 统计待收货订单 -->
+	<select id="countOrdersWait" resultType="INTEGER">
+		select count(orderID) as countOrdersWait from orders where orderstatus ="待收货"
+	</select>
+	<!-- 统计已收货订单 -->
+	<select id="countOrdersRe" resultType="INTEGER">
+		select count(orderID) as countOrdersRe from orders where orderstatus ="已收货"
+	</select>
+	<!-- 统计订单金额 -->
+	<select id="countOrdersPrice" resultType="FLOAT">
+		select sum(totalprice) as totalp from orders
+	</select>
+	<!-- 修改订单状态 -->
+	<update id="updateOrderStatus">
+		update orders set orderstatus = #{0} where orderID = #{1}
+	</update>
+</mapper>

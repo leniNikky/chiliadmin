@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chili.dao.GoodsDao">
+	<resultMap id="c" type="com.chili.pojo.Goods">
+		<id column="goodsID" property="goodsID" jdbcType="INTEGER" />
+		<result column="goodsNo" property="goodsNo" jdbcType="INTEGER" />
+		<result column="goodsName" property="goodsName" jdbcType="VARCHAR" />
+		<result column="goodsPrice" property="goodsPrice" jdbcType="FLOAT" />
+		<result column="goodsIntr" property="goodsIntr" jdbcType="VARCHAR" />
+		<result column="goodsimg" property="goodsimg" jdbcType="VARCHAR" />
+		<result column="goodsCount" property="goodsCount" jdbcType="INTEGER" />
+		<result column="pictext" property="pictext" jdbcType="VARCHAR" />
+		<result column="gclass" property="gclass" jdbcType="VARCHAR" />
+		<result column="gimg1" property="gimg1" jdbcType="VARCHAR" />
+		<result column="gimg2" property="gimg2" jdbcType="VARCHAR" />
+		<result column="gimg3" property="gimg3" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 查找所有商品 -->
+	<select id="AllGoodsList"  resultMap="c">
+		select * from goods
+	</select>
+	<!-- 删除商品 -->
+	<delete  id="DeleteGoods">
+		delete from goods where goodsID = #{goods}
+	</delete>
+	<!-- 根据商品名模糊查询 -->
+	<select id="findGoodsByName" parameterType="java.lang.String"  resultMap="c">
+		select * from goods where goodsName like '%${value}%'
+	</select>
+	<!-- 添加商品 -->
+	<insert id="insertGoods" parameterType="com.chili.pojo.Goods">
+		insert into goods(goodsNo,goodsName,goodsPrice,goodsIntr,
+		goodsImg,goodsCount,pictext,gclass,gimg1,gimg2,gimg3,time)
+		values(#{goodsNo},
+		#{goodsName},#{goodsPrice},#{goddsIntr},#{goodsImg},#{goodsCount},#{pictext},#{gclass},#{gimg1},#{gimg2},#{gimg3},#{time})
+	</insert>
+	<!-- 统计商品数 -->
+	<select id="countGoods" resultType="INTEGER">
+		select count(goodsID) as countGoods from goods
+	</select>
+	<!-- 添加商品 -->
+	<insert id="addGoods"  parameterType="com.chili.pojo.Goods">
+	 insert into goods(goodsNo,goodsName,goodsPrice,goodsIntr,goodsimg,goodsCount,pictext,gclass,gimg1,gimg2,gimg3,time)
+	 values (#{goodsNo},#{goodsName},#{goodsPrice},#{goodsIntr},#{goodsimg},#{goodsCount},#{pictext},#{gclass},#{gimg1},#{gimg2},
+	 #{gimg3},#{time})
+	</insert>
+	<!-- 更新商品 -->
+	<update id="updateGoods"  parameterType="com.chili.pojo.Goods">
+	 update goods set goodsNo=#{goodsNo},goodsName=#{goodsName},goodsPrice=#{goodsPrice},goodsIntr=#{goodsIntr},
+	 goodsimg=#{goodsimg},goodsCount=#{goodsCount},pictext=#{pictext},gclass=#{gclass},gimg1=#{gimg1},gimg2=#{gimg2},
+	 gimg3=#{gimg3},time=#{time} where goodsID = ${goodsID}
+	</update>
+	<!-- 查詢商品詳情 -->
+	<select id="goodsDetail"  resultMap="c">
+		select * from goods where goodsID = #{goodsID}
+	</select>
+</mapper>
